@@ -1,0 +1,17 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "4.11",
+	"Category": "ChaosOverride",
+	"Description": "ChaosOverride",
+	"Modules": [
+		{
+			"Name": "ChaosOverride",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"AIModule"
+			]
+		}
+	]
+}
