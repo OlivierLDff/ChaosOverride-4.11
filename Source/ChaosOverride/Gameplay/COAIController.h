@@ -124,7 +124,30 @@ public:
 	/*---------------------------------------------------------------AI BEHAVIOR---------------------------------------------------------------------------*/
 	/*-----------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-	virtual class ACOCharacter * FindBestPerceptedCOCharacter(TArray<class AActor *> PerceptedActor);
+	/**
+	 *	It is an array containing all the actor percepted by the AIPerception Component
+	 */
+	TArray<class ACOCharacter *> PerceptedCOCharacter;
+
+	/**
+	 *	This function return the best COCharacter that is percepted, the algorithm is changing a lot
+	 *	-Look at our TargetCOCharacter to see if he his dead or not. If he is we look for the best sight actor
+	 *		-If we can see him we end the function and let him as a target and return.
+	 *		-Else We set the actor lost
+	 *
+	 *	-Look for the best sight actor
+	 *		-We loop accross every perceptedActor to find if we can see another one and return the first one correct
+	 *
+	 *	-If we have lost our actor then we chase him
+	 *	-Else we check for sound if we are hearing something not too old and we return this actor
+	 *
+	 *	@param	PerceptedActor	An array of all percepted actor given by the OnPerceptionUpdated function
+	 */
+	virtual class ACOCharacter * FindBestPerceptedCOCharacter(TArray<class ACOCharacter *> PerceptedCOCharacter);
+
+	virtual class ACOCharacter * FindBestPerceptedCOCharacterBySight(TArray<class ACOCharacter *> PerceptedCOCharacter);
+
+	virtual class ACOCharacter * FindBestPerceptedCOCharacterBySound(TArray<class ACOCharacter *> PerceptedCOCharacter);
 
 
 

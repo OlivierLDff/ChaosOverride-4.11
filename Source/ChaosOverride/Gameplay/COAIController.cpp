@@ -154,3 +154,13 @@ ACOCharacter * ACOAIController::FindBestPerceptedCOCharacter(TArray<class AActor
 {
 	return nullptr;
 }
+
+ACOCharacter * ACOAIController::FindBestPerceptedCOCharacterBySight(TArray<class ACOCharacter*> PerceptedCOCharacter)
+{
+	return nullptr;
+}
+
+ACOCharacter * ACOAIController::FindBestPerceptedCOCharacterBySound(TArray<class ACOCharacter*> PerceptedCOCharacter)
+{
+	return nullptr;
+}
