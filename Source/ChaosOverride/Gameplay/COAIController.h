@@ -6,8 +6,8 @@
 #include "COAIController.generated.h"
 
 /**
- * 
- */
+*
+*/
 UCLASS()
 class CHAOSOVERRIDE_API ACOAIController : public AAIController
 {
@@ -17,18 +17,35 @@ public:
 	// Sets default values for this character's properties
 	ACOAIController(const FObjectInitializer& ObjectInitializer);
 
-	/*Spawns and initializes the PlayerState for this Controller*/
+	/**
+	*	Spawns and initializes the PlayerState for this Controller
+	*/
 	virtual void InitPlayerState() override;
 
+	/**
+	*	The current Target for this controller
+	*	When we set this attribute we bind the onDeathFunction of the COCharacter with the OnTargetDeath of this AIcontroller
+	*/
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = TARGET)
+	class ACOCharacter * TargetCOCharacter = nullptr;
+
+	/** Used in the old system by the blueprint, deprecated*/
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = TARGET)
 	class AActor * TargetActor = nullptr;
 
 	/*Call when we are attacking a player*/
 	UFUNCTION(BlueprintCallable, Category = TARGET)
 		void ExecuteAICombatMode(class AActor * Target);
+
 	/*Call to end an attack*/
 	UFUNCTION(BlueprintCallable, Category = TARGET)
 		void FinishAICombatMode(class AActor * Target = nullptr);
+
+	/**
+	*	Called when our target is killed by someone or by us. Called from a delegate
+	*	We unbind this function from the COCharacter onDeath function
+	*	Then we set to NULL the TargetCOCharacter attribute and check for a new target
+	*/
 	UFUNCTION(BlueprintImplementableEvent, Category = TARGET)
 		void OnTargetDeath();
 
@@ -37,23 +54,78 @@ public:
 	/*------------------------------------------------------------RESPAWN SYSTEM---------------------------------------------------------------------------*/
 	/*-----------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-	/*Request for the gamemode to spawn a new pawn for the controller*/
-	virtual void RequestRespawn();
-	/*The timer handle responsible for calling handle respawn on the game mode*/
+	/**
+	*	Request for the COgamemode to spawn a new pawn for the controller
+	*/
+	UFUNCTION(BlueprintCallable, Category = RESPAWN)
+		virtual void RequestRespawn();
+
+	/**
+	*	The timer handle responsible for calling handle respawn on the game mode
+	*/
 	FTimerHandle HandleRespawnTimer;
 
 	/*-----------------------------------------------------------------------------------------------------------------------------------------------------*/
 	/*---------------------------------------------------------PLAYER STATE SYSTEM-------------------------------------------------------------------------*/
 	/*-----------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-	virtual void IncrementDeath(AController * Killer);
-	virtual void IncrementKill(AController * KilledController);
-	virtual void IncrementAssist(AController * KilledByAssistController);
+	/**
+	*	Called from the controller's pawn when dying someone
+	*	It increments the number of death for this controller in his player state and keep a track of the player state that killed him
+	*
+	*	@param Killer	The controller that kill the pawn controlled by this controller
+	*/
+	UFUNCTION(BlueprintCallable, Category = STATE)
+		virtual void IncrementDeath(AController * Killer);
 
-	/*The player state already cast to a COPlayerState*/
+	/**
+	*	Called from the killed controller's pawn when dying
+	*	It increments the number of kill for this controller in his player state and keep a track of the player state that was killed
+	*
+	*	@param KilledController	The controller killed by this controller's pawn
+	*/
+	UFUNCTION(BlueprintCallable, Category = STATE)
+		virtual void IncrementKill(AController * KilledController);
+
+	/**
+	*	Called from the killed controller's pawn when dying
+	*	It increments the number of assist for this controller in his player state and keep a track of the player state that was killed by assist
+	*
+	*	@param KilledByAssistController	The controller killed by another controller by that we made some damage before his death
+	*/
+	UFUNCTION(BlueprintCallable, Category = STATE)
+		virtual void IncrementAssist(AController * KilledByAssistController);
+
+	/**
+	*	The player state already cast to a COPlayerState
+	*	This attribute is set in InitPlayerState just after the default player state attribute is set
+	*/
+	//UFUNCTION(BlueprintReadOnly, VisibleAnywhere, Category = STATE)
 	class ACOPlayerState * COPlayerState = nullptr;
+
+	/**
+	*	@return The COPlayerState attribute
+	*/
+	UFUNCTION(BlueprintCallable, Category = STATE)
 	class ACOPlayerState * GetCOPlayerState() const;
-	
-	
-	
+
+	/*-----------------------------------------------------------------------------------------------------------------------------------------------------*/
+	/*---------------------------------------------------------------PSEUDO--------------------------------------------------------------------------------*/
+	/*-----------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+	/**
+	*	An array that contain all the default name for the player state when it is created
+	*	In the InitPlayerState function we set the default pseudo from one of this name in the player state
+	*/
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = PSEUDO)
+		TArray<FString> DefaultPlayerStatePseudo;
+
+	/*-----------------------------------------------------------------------------------------------------------------------------------------------------*/
+	/*---------------------------------------------------------------AI BEHAVIOR---------------------------------------------------------------------------*/
+	/*-----------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+	virtual class ACOCharacter * FindBestPerceptedCOCharacter(TArray<class AActor *> PerceptedActor);
+
+
+
 };
