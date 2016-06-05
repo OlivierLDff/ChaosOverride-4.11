@@ -130,6 +130,12 @@ public:
 	TArray<class ACOCharacter *> PerceptedCOCharacter;
 
 	/**
+	 *	The default search time when we loose a target by sight or by sound, in seconds.
+	 */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = PSEUDO)
+		float DefaultSeachTime = 5.0f;
+
+	/**
 	 *	This function return the best COCharacter that is percepted, the algorithm is changing a lot
 	 *	-Look at our TargetCOCharacter to see if he his dead or not. If he is we look for the best sight actor
 	 *		-If we can see him we end the function and let him as a target and return.
