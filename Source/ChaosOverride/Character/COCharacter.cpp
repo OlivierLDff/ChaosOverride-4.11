@@ -415,7 +415,23 @@ bool ACOCharacter::IsFalling() const
 
 bool ACOCharacter::IsNearGround() const
 {
-	return false;
+	/* We trace from the center of the character to the ground 
+	 * I will maybe need to change the axis if a custom gravity system is implemented
+	 * TODO
+	 */
+
+	FHitResult OutHit;
+	const FVector Start = GetActorLocation();
+	const FVector End = GetActorLocation() - FVector(0, 0, NearDistanceOfGround);
+	FCollisionQueryParams Params;
+	FCollisionResponseParams ResponseParam;
+	Params.AddIgnoredActor(this);
+	Params.AddIgnoredActor(GetOwner());
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("bool : %d"), GetWorld() && GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECollisionChannel::ECC_Visibility, Params) && GetCharacterMovement()->Velocity.Z <= 0 && IsFalling()));
+
+	/*If the world is valid, we hit something and we are falling down*/
+	return GetWorld() && GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECollisionChannel::ECC_Visibility, Params) && GetCharacterMovement()->Velocity.Z<=0 && IsFalling();
 }
 
 bool ACOCharacter::GetIsGliding() const

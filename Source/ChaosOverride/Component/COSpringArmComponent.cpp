@@ -6,16 +6,28 @@
 
 void UCOSpringArmComponent::UpdateDesiredArmLocation(bool bDoTrace, bool bDoLocationLag, bool bDoRotationLag, float DeltaTime)
 {
+	static bool bDivideCameraSpeed = false;
 	Super::UpdateDesiredArmLocation(bDoTrace, bDoLocationLag, bDoRotationLag, DeltaTime);
 	
 	ACOCharacter * COCharacter = Cast<ACOCharacter>(GetOwner());
 	if (COCharacter)
 	{
-		if (COCharacter->IsFalling() || COCharacter->IsNearGround())
+		/*Calculate the lag on Z axis depending if we are falling or not*/
+		if (COCharacter->IsFalling() && !COCharacter->IsNearGround())
+		{
 			CameraLagSpeeds.Z = ZLagInAir;
+			bDivideCameraSpeed = false;
+		}		
 		else
+		{
+			if (bDivideCameraSpeed)
+			{
+				CameraLagSpeeds.Z = ZLagInAir / 10;		//Divide here for a smother transition
+				bDivideCameraSpeed = true;
+			}			
 			CameraLagSpeeds.Z = FMath::FInterpTo(CameraLagSpeeds.Z, ZLagOnGround, DeltaTime, SpeedBetweenInAirAndOnGround);
-		CustomCameraLag(DeltaTime);
+		}		
+		CustomCameraLag(DeltaTime);	//Update the camera lag
 	}
 
 }
@@ -72,8 +84,8 @@ void UCOSpringArmComponent::CustomCameraLag(float DeltaTime)
 			//The last camera position in local space
 			const FVector LastCamLocalPosition = T.InverseTransformPosition(LastDesiredCameraPos);
 
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("CamLocalPosition %s"), *CamLocalPosition.ToString()));
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("LastCamLocalPosition %s"), *LastCamLocalPosition.ToString()));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("CamLocalPosition %s"), *CamLocalPosition.ToString()));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("LastCamLocalPosition %s"), *LastCamLocalPosition.ToString()));
 
 			//The new X cam location component in local space
 			const float XComponent = FMath::FInterpTo(CamLocalPosition.X, LastCamLocalPosition.X, DeltaTime, CameraLagSpeeds.X);
@@ -86,7 +98,7 @@ void UCOSpringArmComponent::CustomCameraLag(float DeltaTime)
 			//The new cam position in world space
 			FVector NewCamPositionInWorldSpace = T.TransformPosition(FVector(XComponent, YComponent, ZComponent));
 
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("FVector(XComponent, YComponent, ZComponent) %s"), *FVector(XComponent, YComponent, ZComponent).ToString()));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("FVector(XComponent, YComponent, ZComponent) %s"), *FVector(XComponent, YComponent, ZComponent).ToString()));
 
 			//We clamp the lag
 

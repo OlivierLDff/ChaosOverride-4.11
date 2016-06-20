@@ -182,7 +182,7 @@ public:
 	 *	@see	IsNearGround
 	 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "JUMP")
-		float NearDistanceOfGround = 100.f;
+		float NearDistanceOfGround = 150.f;
 
 
 	/*------------------------*/
