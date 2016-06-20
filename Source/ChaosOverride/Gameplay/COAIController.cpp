@@ -150,7 +150,7 @@ ACOPlayerState * ACOAIController::GetCOPlayerState() const
 	return COPlayerState;
 }
 
-ACOCharacter * ACOAIController::FindBestPerceptedCOCharacter(TArray<class AActor*> PerceptedActor)
+ACOCharacter * ACOAIController::FindBestPerceptedCOCharacter(TArray<class ACOCharacter*> PerceptedCOCharacter)
 {
 	return nullptr;
 }

@@ -160,7 +160,30 @@ public:
 	/*Called when the player land after a delay TimeBetweenTwoJump*/
 	void ResetJump();
 
-	bool IsFalling() const;
+	/**
+	 *	Indicate if the player is really falling, which means he is dashing
+	 *
+	 *	@return	If the character is falling
+	 */
+	UFUNCTION(BlueprintCallable, Category = JUMP)
+		virtual bool IsFalling() const;
+
+	/**
+	 *	Is the player near ground, usefull to know if the player is at NearDistanceOfGround meter of the ground
+	 *	
+	 *	@return	If the player is falling a near ground
+	 */
+	UFUNCTION(BlueprintCallable, Category = JUMP)
+		virtual bool IsNearGround() const;
+
+	/**
+	 *	The distance at which the player can be consider near the ground when he is falling
+	 *
+	 *	@see	IsNearGround
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "JUMP")
+		float NearDistanceOfGround = 100.f;
+
 
 	/*------------------------*/
 	/*------GLIDE SECTION-----*/
@@ -393,6 +416,12 @@ public:
 	virtual void OnPrevWeaponPressed();
 	/*Called when the previous weapon button is released*/
 	virtual void OnPrevWeaponReleased();
+
+	/**
+	 *	The offset of the camera when possessing a weapon
+	 *	Not useful now
+	 */
+	FVector FinalGunCamOffset = FVector(0, 0, 0);
 
 	/*-----------------------------------------------------------------------------------------------------------------------------------------------------*/
 	/*------------------------------------------------------------DAMAGE--------------------------------------------------------------------------------*/

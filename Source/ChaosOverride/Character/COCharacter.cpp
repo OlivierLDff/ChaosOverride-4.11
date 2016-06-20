@@ -89,6 +89,8 @@ void ACOCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
 // Called every frame
 void ACOCharacter::Tick( float DeltaTime )
 {
+	//CameraBoom->CustomCameraLag(DeltaTime);
+
 	Super::Tick( DeltaTime );
 	/*We fill in the target array*/
 	CheckIfAiming();
@@ -409,6 +411,11 @@ bool ACOCharacter::IsFalling() const
 	{
 		return false;
 	}
+}
+
+bool ACOCharacter::IsNearGround() const
+{
+	return false;
 }
 
 bool ACOCharacter::GetIsGliding() const

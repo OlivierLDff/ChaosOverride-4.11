@@ -3,6 +3,7 @@
 #include "ChaosOverride.h"
 #include "COPlayerCameraManager.h"
 #include "Character/COCharacter.h"
+#include "Component/COSpringArmComponent.h"
 
 ACOPlayerCameraManager::ACOPlayerCameraManager(const class FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -27,6 +28,8 @@ void ACOPlayerCameraManager::UpdateCamera(float DeltaTime)
 		/*Update the camera fov and zoom when aiming*/
 		if (COCharacter->GetIsAiming())
 			SetFOV(COCharacter->GetFOVWhenAiming());
+
+		
 		
 	}
 	

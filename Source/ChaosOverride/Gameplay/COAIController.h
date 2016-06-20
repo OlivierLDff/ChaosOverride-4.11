@@ -154,23 +154,23 @@ public:
 	virtual class ACOCharacter * FindBestPerceptedCOCharacter(TArray<class ACOCharacter *> PerceptedCOCharacter);
 
 	/**
-	*	This function return the best COCharacter that is percepted by sight
-	*	For now it only return the first sight percepted COController
-	*	It is kind of simulating the behaviour of a normal person that will not shoot especially at the closest person but at the first one seen
-	*
-	*	@param	PerceptedCOCharacter	An array of all percepted COCharacter given by the OnPerceptionUpdated function
-	*
-	*	@return	ACOCharacter	The best percepted COCharacter by sight
-	*/
+	 *	This function return the best COCharacter that is percepted by sight
+	 *	For now it only return the first sight percepted COController
+	 *	It is kind of simulating the behaviour of a normal person that will not shoot especially at the closest person but at the first one seen
+	 *
+	 *	@param	PerceptedCOCharacter	An array of all percepted COCharacter given by the OnPerceptionUpdated function
+	 *
+	 *	@return	ACOCharacter	The best percepted COCharacter by sight
+	 */
 	virtual class ACOCharacter * FindBestPerceptedCOCharacterBySight(TArray<class ACOCharacter *> PerceptedCOCharacter);
 
 	/**
-	*	This function return the closest COCharacter that emitted sound since DefaultSeachTime
-	*
-	*	@param	PerceptedCOCharacter	An array of all percepted COCharacter given by the OnPerceptionUpdated function
-	*
-	*	@return	ACOCharacter	The best percepted COCharacter by sound
-	*/
+	 *	This function return the closest COCharacter that emitted sound since DefaultSeachTime
+	 *
+	 *	@param	PerceptedCOCharacter	An array of all percepted COCharacter given by the OnPerceptionUpdated function
+	 *
+	 *	@return	ACOCharacter	The best percepted COCharacter by sound
+	 */
 	virtual class ACOCharacter * FindBestPerceptedCOCharacterBySound(TArray<class ACOCharacter *> PerceptedCOCharacter);
 
 
